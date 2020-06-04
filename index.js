@@ -69,4 +69,3 @@ app.get('/acercademi', (req, res) => {
 app.listen(8000, () => {
     console.log('Escuchando el puerto 8000');
 });
-console.log('jala2')
