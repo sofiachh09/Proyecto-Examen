@@ -1,71 +1,30 @@
 //Importamos los paquetes que requerimos
 const express = require('express');
 const hbs = require('hbs');
+const mongoose = require(mongoose);
+//creamos una constante para el valor del puereto
+const Puerto = process.env.PORT || 3000;
 
-//creamos la aplicacion
+//emplear las rutas
+let pintoresRouter = require('./routes/pintor')
 const app = express();
-
-//Definimos el motor de plantillas
-//No de vamos a emplear MVC (Vista vamos a utiisar HBS)
 app.set('view engine', 'hbs');
+hbs.registerPartials( _dirname + '/views/partials');
+app.use(experess.static(_dirname + '/public'));
 
-//Vamos a generar los partials
-hbs.registerPartials(__dirname + '/views/partials/');
+app.use('/', pintoresRouter);
 
-//Generamos el sitio estatico
-app.use(express.static(__dirname + '/public'));
+mongoose.promise = global.promise;
+const cadena = 'mongodb+srv://examen3:toledo@chaconsofia-3ibb5.azure.mongodb.net/Examentres?retryWrites=true&w=majority';
+mongoose.content(cadena,{ useNewUrsParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log('conexion establecida con mongo ');
 
-//configurar mis rutas
-app.get('/', (req, res) => {
-    res.render('index', {
-        autor: 'Sofia Chacon Holguin - 4E',
-        year: new Date().getFullYear(),
-        title: 'Inicio'
-    });
+    })
+    .catch(err => console.log(err));
+
+
+app.listen(port, () => {
+    console.log('escuchando el puerto 3000');
 });
 
-app.get('/picasso', (req, res) => {
-    res.render('picasso', {
-        autor: 'Sofia Chacon Holguin - 4E',
-        year: new Date().getFullYear(),
-        title: 'Pablo Picasso'
-    });
-});
-
-app.get('/edvard', (req, res) => {
-    res.render('edvard', {
-        autor: 'Sofia Chacon Holguin - 4E',
-        year: new Date().getFullYear(),
-        title: 'Edvard Munch'
-    });
-});
-
-app.get('/leo', (req, res) => {
-    res.render('leonardo', {
-        autor: 'Sofia Chacon Holguin - 4E',
-        year: new Date().getFullYear(),
-        title: 'Leonardo da Vinci',
-        algo: "Leonardo da Vinci"
-    });
-});
-app.get('/vin', (req, res) => {
-    res.render('vincent', {
-        autor: 'Sofia Chacon Holguin - 4E',
-        year: new Date().getFullYear(),
-        title: 'Vincent Van Goghx',
-        algo: "Vincent Van Goghx"
-    });
-});
-app.get('/acercademi', (req, res) => {
-    res.render('acercademi', {
-        autor: 'Sofia Chacon Holguin - 4E',
-        year: new Date().getFullYear(),
-        title: 'Acerca De Mi',
-        algo: "Acerca De Mi"
-    });
-});
-
-//Arrancamos el servisdor web
-app.listen(8000, () => {
-    console.log('Escuchando el puerto 8000');
-});
